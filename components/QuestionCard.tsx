@@ -149,7 +149,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       {/* Post Header */}
       <div className="p-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          {/* CONTENT POSTER PROFILE PIC REPLACEMENT */}
           <div className="w-10 h-10 rounded-full bg-[#2b1810] flex items-center justify-center text-[#D4AF37] font-black text-sm border border-[#D4AF37]/30 shadow-sm overflow-hidden">
             {authorPic ? (
               <img src={authorPic} alt={authorDisplayName} className="w-full h-full object-cover" />
@@ -192,7 +191,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         {/* Media Rendering Section */}
         {entry.mediaUrl && (
           <div className="mb-4 rounded-lg overflow-hidden border border-gray-100 bg-black bg-opacity-5 relative group min-h-[100px] flex items-center justify-center">
-            {isMediaLoading && entry.mediaType !== 'document' && (
+            {isMediaLoading && entry.mediaType !== 'document' && entry.mediaType !== 'none' && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div>
               </div>
@@ -202,7 +201,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               <img 
                 src={entry.mediaUrl} 
                 onLoad={() => setIsMediaLoading(false)}
-                className={`w-full max-h-[400px] object-cover cursor-pointer hover:brightness-95 transition-opacity duration-300 ${isMediaLoading ? 'opacity-0' : 'opacity-100'}`} 
+                className={`w-full max-h-[400px] object-cover cursor-pointer hover:brightness-95 hover:scale-105 transition-all duration-700 ease-in-out ${isMediaLoading ? 'opacity-0' : 'opacity-100'}`} 
                 onClick={() => onZoom(entry)}
                 alt="Post Media"
               />
@@ -211,13 +210,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               <video 
                 src={entry.mediaUrl} 
                 controls 
+                playsInline
+                preload="metadata"
                 onLoadedData={() => setIsMediaLoading(false)}
                 className={`w-full max-h-[400px] bg-black cursor-pointer transition-opacity duration-300 ${isMediaLoading ? 'opacity-0' : 'opacity-100'}`} 
-                onClick={(e) => {
-                  if ((e.target as any).tagName !== 'VIDEO_CONTROLS') {
-                    onZoom(entry);
-                  }
-                }}
               />
             )}
             {entry.mediaType === 'document' && (

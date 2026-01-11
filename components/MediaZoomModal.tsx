@@ -93,7 +93,9 @@ const MediaZoomModal: React.FC<MediaZoomModalProps> = ({
           <video 
             src={entry.mediaUrl} 
             controls 
+            playsInline
             autoPlay
+            preload="auto"
             onLoadedData={() => setIsMediaLoading(false)}
             className={`max-w-full max-h-full transition-all duration-700 ${
               isMediaLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
@@ -102,8 +104,24 @@ const MediaZoomModal: React.FC<MediaZoomModalProps> = ({
         )}
 
         {entry.mediaType === 'document' && (
-          <div className="w-full max-w-5xl h-[85%] flex flex-col bg-white rounded shadow-2xl overflow-hidden animate-scale-in">
-             <iframe src={entry.mediaUrl} className="w-full h-full border-none" title="Doc Preview" />
+          <div className="w-full max-w-5xl h-[90%] flex flex-col bg-white rounded shadow-2xl overflow-hidden animate-scale-in relative border border-[#E5E1DA]">
+             <div className="bg-gray-100 p-2 border-b flex justify-between items-center">
+                <span className="text-xs font-bold text-gray-600 truncate px-2">{entry.mediaName || "Academic Document"}</span>
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Document Reader</span>
+             </div>
+             <object
+               data={entry.mediaUrl}
+               type="application/pdf"
+               className="w-full h-full border-none"
+               onLoad={() => setIsMediaLoading(false)}
+             >
+                <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-gray-50">
+                  <svg className="w-16 h-16 text-red-200 mb-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A1 1 0 0111 2.414l4.586 4.586a1 1 0 01.293.707V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg>
+                  <h3 className="text-lg font-bold text-[#2b1810]">Viewer Unavailable</h3>
+                  <p className="text-sm text-[#5c4033] mb-4">Your device's native PDF viewer is not active.</p>
+                  <button onClick={handleDownload} className="px-6 py-2 bg-[#2b1810] text-[#D4AF37] font-bold rounded-lg hover:brightness-125 transition-all">Download Reference</button>
+                </div>
+             </object>
           </div>
         )}
 
